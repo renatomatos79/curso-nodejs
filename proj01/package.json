@@ -1,0 +1,20 @@
+{
+  "name": "proj01",
+  "version": "1.0.0",
+  "description": "aula inicial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lib",
+    "util",
+    "package",
+    "framework"
+  ],
+  "author": "renato",
+  "license": "ISC",
+  "dependencies": {
+    "cpf-check": "^3.0.0"
+  }
+}
