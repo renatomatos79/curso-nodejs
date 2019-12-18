@@ -1,9 +1,11 @@
 class Product {
+    // propriedades da classe produto
     Id:number;
     Name:string;
     Unity:string;
     Price:number;
     
+    // parametro de entrada do construtor
     constructor(id:number, name: string, unity: string, price: number){
         this.Id = id;
         this.Name = name;
@@ -12,4 +14,4 @@ class Product {
     }
 }
 
-export {Product};
+export { Product };
