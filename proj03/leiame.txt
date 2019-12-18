@@ -11,6 +11,12 @@ npm i -g nodemon (monitorar mudanças no arquivo e reexecutar a app - deixar em o
 
 temos aqui 2 tasks rodando! nodemon e tsc
 
+Rest:
+trabalha com JSON
+
+Restful:
+trabalha com JSON e código HTTP e verbos no padrão rest
+
 Pq Restify?
 Temos JSON por padrão
 Temos erros direcionados para API Rest (Não retornar html por exemplo)
@@ -36,4 +42,140 @@ Status de Erro
 500 - erro interno
 501 - nao implementado ainda
 503 - indisponivel
+
+
+Métodos e Nomenclatura
+
+API para Pedidos
+
+GET	/pedidos
+retorna a lista de todos os pedidos da base de dados
+
+GET	/pedidos?dataInicio=01012019&dataTermino=31122019
+retornar a lista de pedidos no periodo
+parametros vem na queryString ou na URL
+
+GET	/pedidos/100
+retorna os dados do pedido 100
+
+GET	/pedidos/100/produtos
+retorna todos os produtos associados ao pedido 100
+
+GET	/pedidos/100/produtos/2/caracteristicas
+retorna as caracteristicas do produto 2 que esta no pedido 100
+informacoes complementares do produto gravadas no pedido
+
+GET	/produtos/2/caracteristicas
+retorna as caracteristicas do produto 2 da tabela de produtos e nao de pedidos
+
+POST	/pedidos
+inclui um novo pedido
+neste caso no body da api temos os campos do pedido
+
+Body da requisição
+{
+  "obs": "preciso com urgencia",
+  "enderecoEntrega": {
+	"UF": "SP",
+	"Cidade": "Sao Paulo",
+	"Bairro": "Centro"
+  },
+  "tipoFrete": "CIF",
+  "produtos: [
+    { "id": 1, "quantidade": 2, "preco": 2.1, "complemento": "cor branca" },
+    { "id": 2, "quantidade": 1, "preco": 4.1, "complemento": "cor preta" }
+  ]
+}
+
+No header da requisição entram os dados de acesso (Token)
+"Authorization": No Auth
+"Authorization": Basic - usuário e senha no cabeçalho (converte para base64)
+"Authorization": OAuth2 - JSON Web Token JWT (OAuth Open Authentication) Usado no mercado
+"Authorization": Bearer - Ao portador - Mandamos o conteudo encriptado (TOken)
+
+Resposta ao Pedido
+
+{
+  "NumeroPedido": 1012,
+  "DataPedido": "01/01/2019",
+  "DataPrevistaEntrega": "05/01/2019",
+  "ValorPedido": 100.24,
+  "StatusPedido": "Cadastrado",
+  "Cliente": {
+    "Id": 100,
+    "Nome": "Renato"
+  },
+  "enderecoEntrega": {
+	"UF": "SP",
+	"Cidade": "Sao Paulo",
+	"Bairro": "Centro"
+  },
+  "produtos: [
+    { "id": 1, "nome": "teclado", "unidade": "und", "quantidade": 2, "preco": 2.1, "complemento": "cor branca" },
+    { "id": 2, "nome": "monitor", "unidade": "und", quantidade": 1, "preco": 4.1, "complemento": "cor preta" }
+  ]
+}
+
+
+/usuarios/login
+{
+  "login": "renato",
+  "senha": "$%QW$QW$%QW#$%W#$%"
+}
+
+Reposta
+{
+  "Token": "1454556#Qq3413412341234",
+  "Expiration": "2019-01-01 10:05:37 PM"
+}
+
+
+PATCH 	/pedidos/1012/endereco-entrega
+Body da requisição
+{
+  "enderecoEntrega": {
+	"UF": "SP",
+	"Cidade": "Sao Paulo",
+	"Bairro": "Centro"
+  }
+}
+
+PATCH 	/pedidos/1012/obs
+Body da requisição
+{
+  "obs": "preciso que seja enviada a NF para o email xpto"
+}
+
+PUT	/pedidos/1012
+alterar o pedido inteiro
+
+Body da requisição
+{
+  "obs": "preciso com urgencia",
+  "enderecoEntrega": {
+	"UF": "SP",
+	"Cidade": "Sao Paulo",
+	"Bairro": "Bairro de Fatima"
+  },
+  "tipoFrete": "FOB",
+  "produtos: [
+    { "id": 1, "quantidade": 2, "preco": 2.1, "complemento": "cor branca" }
+  ]
+}
+
+
+DELETE	/pedidos/1012
+apaga o pedido 1012
+
+DELETE	/pedidos/1012/produtos/1
+apaga o item 1 do pedido 1012
+
+
+
+
+
+
+
+
+
 
