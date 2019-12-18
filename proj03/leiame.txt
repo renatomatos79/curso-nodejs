@@ -1,0 +1,39 @@
+Lista de comandos:
+==================
+mkdir proj03
+cd proj03
+npm init -y
+npm i restify@6.3.4 --save -E (-E versão exata)
+npm i @types/restify@5.0.6 -D -E (-D equivalente a --save)
+copiar do projeto 02 o arquivo tsconfig.json
+tsc -w (deixar o watch rodando em um terminal)
+npm i -g nodemon (monitorar mudanças no arquivo e reexecutar a app - deixar em outro terminal)
+
+temos aqui 2 tasks rodando! nodemon e tsc
+
+Pq Restify?
+Temos JSON por padrão
+Temos erros direcionados para API Rest (Não retornar html por exemplo)
+Suporte nativo para nossas API
+
+Http Status:
+200 ok
+201 criado - post
+202 assincrono
+204 sem conteudo retornado no corpo da resposta
+
+Status de Erro
+30X - Redirecionamento
+300 - ha mais de uma opcao de retorno (ambiguidade)
+301 - endereco foi movido definitivamente e o novo devera ser retornado no corpo da resposta
+302 - movido temporariamente para outro endereço
+
+400 - Erro da requisição (bad request)
+401 - Nao autorizado (precisa de logar)
+403 - Acesso negado (usuario sem permissaoo para uso do recurso)
+404 - conteudo nao encontrado
+
+500 - erro interno
+501 - nao implementado ainda
+503 - indisponivel
+
