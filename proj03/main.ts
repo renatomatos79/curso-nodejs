@@ -111,7 +111,7 @@ server.patch("/products/:id/price", (request, response, next) => {
     return next();
 });
 
-server.listen(3000, () => {
-    console.log("Product API is runninn on http://localhost:3000");
+server.listen(3001, () => {
+    console.log("Product API is runninn on http://localhost:3001");
 });
 
