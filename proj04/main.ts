@@ -3,6 +3,7 @@ import * as restify from 'restify';
 // importando a classe produto
 import { Product } from './product';
 import { Group } from './group';
+import { Util } from './util';
 
 // inciar o restify
 const server = restify.createServer({
@@ -30,8 +31,8 @@ products.push(new Product(5, "Caixa caneta bic preta 6 unidades", "cx", 6.00, 12
 products.push(new Product(6, "Tesoura papel", "und", 9.75, 50, groups.filter(f=>f.id === 2)[0]));
 
 products.push(new Product(7, "Lego carro", "und", 55.00, 45, groups.filter(f=>f.id === 3)[0]));
-products.push(new Product(7, "Lego castelo", "und", 88.00, 30, groups.filter(f=>f.id === 3)[0]));
-products.push(new Product(7, "Joystick PC", "und", 35.00, 65, groups.filter(f=>f.id === 3)[0]));
+products.push(new Product(8, "Lego castelo", "und", 88.00, 30, groups.filter(f=>f.id === 3)[0]));
+products.push(new Product(9, "Joystick PC", "und", 35.00, 65, groups.filter(f=>f.id === 3)[0]));
 
 
 
@@ -39,58 +40,78 @@ products.push(new Product(7, "Joystick PC", "und", 35.00, 65, groups.filter(f=>f
 // request: dados do pedido
 // response: dados da resposta
 // next: proximo item na pilha
+// temos no request um objeto especial chamado query que so ficara disponivel se eu configurar o node para o queryParser
+// opcoes de filtro
+// /products
+// /products?group=x onde x representa o codigo do grupo
+// /products?skip=n onde n representa a quantidade de elementos que irei saltar
+// /products?take=n onde n representa a quantidade de elementos que irei retornar
+// /products?skip=n&take=m salto n elementos e pego os m primeiros
+// slice(x, y) ele salta x elementos e pega y elementos
+
+// quando informar o parametro na rota com : entao voce o ler usando params
+// quando os campos forem opcionais, usa-se query
+
 server.get("/products", (request, response, next) => {
     let items = products;
-    if (request.query.skip) {
-        const skip = parseInt(request.query.skip);
-        items = items.slice(skip);
+    if (request.query.group) {
+        const group = parseInt(request.query.group);
+        items = items.filter(w => w.group.id === group);
     }
-    if (request.query.take) {
-        const take = parseInt(request.query.take);
-        items = items.slice(0, take);
+    if (request.query.name) {
+        const name = request.query.name;
+        items = items.filter(w => w.group.name.toLocaleLowerCase().includes(name) || w.name.toLocaleLowerCase().includes(name) );
     }
+    // util está declarado em Util.ts e contem um metodo estático (class no delphi)
+    items = Util.pagination(items, request.query.skip, request.query.take);
     // ja vai ser retornado no formato JSON e com staus code correto 200
     response.json(items);
     // passar para a proxima callback
     return next();
 });
 
-server.get("/products/:id", (request, response, next) => {
-    const id = parseInt(request.params.id);
-    // uso igual com === porque comparo o conteudo e tipo de dado
-    const items = products.filter(exp => exp.id === id);
-    if (items.length === 0) {
-        // cadastra a variavel erro do tipo Any
-        const error: any = new Error();
-        error.statusCode = 404;
-        error.message = "Product not found!";
-        return next(error);
-    }   
-    response.json(items[0]);
+// exemplo de map para retornar apenas os nomes
+server.get("/products/names", (request, response, next) => {
+    /*
+    let names = Array<string>();
+    products.forEach(p => {
+        names.push(p.name);
+    });
+    */
+    const names = products.map(m => m.name);
+    response.json(names);
     return next();
 });
 
-server.get("/products/group/:id", (request, response, next) => {
-    const idGroup = parseInt(request.params.id);
-    let items = products.filter(f => f.group.id === idGroup);
+// usando map para pegar o nome dos grupos
+server.get("/products/groups", (request, response, next) => {
+    const groups = products.map(m => m.group.name);
+    let names = Array<string>();
+    groups.forEach(g => {
+        if (names.indexOf(g) < 0) {
+            names.push(g);
+        }
+    });    
+    response.json(names);
+    return next();
+});
+
+server.get("/groups/report", (request, response, next) => {
+    let filter = groups;
+    if (request.query.group) {
+        const id = parseInt(request.query.group);
+        filter = filter.filter(f => f.id === id);
+    }
+    let reports = Array<any>();
+    filter.forEach(g => {
+        const report = Product.report(g.id, products);
+        const json = { group: g, summary: report };
+        reports.push(json);
+    });        
     response.statusCode = 200;
-    response.json(items);
+    response.json(reports);
     return next();
 });
-
-
-server.get("/groups/:id/report", (request, response, next) => {
-    const idGroup = parseInt(request.params.id);
-    const count = products.filter(f => f.group.id === idGroup).length;
-    const sumBalance = products.filter(f => f.group.id === idGroup).map(s => s.balance * s.price).reduce((a,b) => a + b, 0);
-    const maxBalance = products.filter(f => f.group.id === idGroup).map(s => s.balance * s.price).reduce((a, b) => a > b ? a : b);
-    const minBalance = products.filter(f => f.group.id === idGroup).map(s => s.balance * s.price).reduce((a, b) => a > b ? b : a);
-    const avgBalance = parseFloat((count === 0 ? 0 : sumBalance / count).toFixed(2));
-    response.statusCode = 200;
-    response.json({"sum": sumBalance, "max": maxBalance, "min": minBalance, "avg": avgBalance, "count": count});
-    return next();
-});
-
 
 server.listen(3001, () => {
     console.log("Product API is runninn on http://localhost:3001");
