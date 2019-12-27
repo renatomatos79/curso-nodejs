@@ -1,0 +1,15 @@
+{
+    "compileOnSave": true,
+    "compilerOptions":
+    {
+        "outDir": "dist",
+        "module": "commonjs",
+        "target": "es6",
+        "sourceMap": true,
+        "typeRoots" : ["./typings"]
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
