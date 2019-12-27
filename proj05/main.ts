@@ -5,17 +5,12 @@ import { GroupService } from "./service/groupService";
 import { ProductService } from "./service/productService";
 import { ProductController } from "./controller/productController";
 
-const settings = new Settings();
-settings.name = 'Curso NodeJS';
-settings.port = 3001;
-settings.version = '1.0.0';
-
 const groupService = new GroupService();
 const productService = new ProductService(groupService);
 const groupController = new GroupController(productService, groupService);
 const productController = new ProductController(productService);
 
-const server = new AppServer(settings);
+const server = new AppServer(Settings);
 server.bootstrap([
     groupController,
     productController
