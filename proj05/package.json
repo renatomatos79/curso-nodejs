@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "jsonwebtoken": "^8.5.1",
     "restify": "6.3.4"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.5",
     "@types/restify": "5.0.6"
   }
 }

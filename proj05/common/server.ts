@@ -1,19 +1,18 @@
 import * as restify from 'restify'
-import { Settings } from '../model/settings';
+import { settings } from '../model/settings';
 import { Router } from './router';
 
 class AppServer {
 
     server: restify.Server;
 
-    constructor(public settings: Settings){}
+    constructor(){}
 
     bootstrap(routers: Router[] = []): Promise<restify.Server> {
         return new Promise((resolver, reject) => {
-            console.log("settings: ", this.settings);
             this.server = restify.createServer({
-                name: this.settings.name,
-                version: this.settings.version
+                name: settings.name,
+                version: settings.version
             });
 
             // habilitar uso de parametros
@@ -26,7 +25,7 @@ class AppServer {
                 router.applyRoutes(this.server);
             }
 
-            this.server.listen(this.settings.port, () => {
+            this.server.listen(settings.port, () => {
                 console.log("Product API is runninn on http://localhost");
                 resolver(this.server);
             });
