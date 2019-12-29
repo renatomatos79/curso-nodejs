@@ -4,6 +4,7 @@ import { Router } from "../common/router";
 import *  as jwt from 'jsonwebtoken';
 import { settings } from '../model/settings';
 import { UserService } from '../service/userService';
+import { authorize } from '../security/authorize.handler';
 
 class UserController extends Router {
 
@@ -25,8 +26,22 @@ class UserController extends Router {
         }
     }
 
+    getAll = (request, response, next) => {        
+        const userService =  new UserService();
+        const users = userService.users();
+        response.json(users);  
+    }
+
+    getAll_V2 = (request, response, next) => {        
+        const userService =  new UserService();
+        const users = userService.users_v2();
+        response.json(users);  
+    }
+
     applyRoutes(app: restify.Server) {
         app.post("users/authenticate", this.authenticate);
+        app.get({path: "/users", version: "1.0.0"  }, [authorize('operator', 'admin'), this.getAll]);
+        app.get({path: "/users", version: "2.0.0" }, [authorize('operator', 'admin'), this.getAll_V2]);
     }
 
 }
