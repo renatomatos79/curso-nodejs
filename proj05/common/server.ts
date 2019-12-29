@@ -1,6 +1,7 @@
 import * as restify from 'restify'
 import { settings } from '../model/settings';
 import { Router } from './router';
+import { tokenParser } from '../security/token.parser';
 
 class AppServer {
 
@@ -15,10 +16,9 @@ class AppServer {
                 version: settings.version
             });
 
-            // habilitar uso de parametros
             this.server.use(restify.plugins.queryParser());
-            // habilitar conversao
             this.server.use(restify.plugins.bodyParser());
+            this.server.use(tokenParser);
 
             //routes
             for (let router of routers) {

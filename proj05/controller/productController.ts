@@ -2,6 +2,7 @@ import * as restify from 'restify'
 import { ProductService } from "../service/productService";
 import { Util } from "../common/util";
 import { Router } from "../common/router";
+import { authorize } from '../security/authorize.handler';
 
 class ProductController extends Router {
 
@@ -28,7 +29,7 @@ class ProductController extends Router {
     }
 
     applyRoutes(app: restify.Server) {
-        app.get("products", this.products);
+        app.get("products", [authorize('admin'), this.products]);
     }
 
 }
