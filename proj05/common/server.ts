@@ -18,6 +18,7 @@ class AppServer {
 
             this.server.use(restify.plugins.queryParser());
             this.server.use(restify.plugins.bodyParser());
+            // agora estou obrigando a leitura do token em todas as requisicoes
             this.server.use(tokenParser);
 
             //routes

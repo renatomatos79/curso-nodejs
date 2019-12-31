@@ -13,7 +13,8 @@ class UserController extends Router {
     }
     
     authenticate = (request, response, next) => {        
-        console.log("authenticate: ", request.body);
+        console.log("UserController.authenticate");
+        console.log(request.body);
         const email = request.body.email;
         const password = request.body.password;
         const userService =  new UserService();
@@ -21,7 +22,7 @@ class UserController extends Router {
         if (user === null || user === undefined) {
             return next(new NotFoundError());
         } else {
-            const token = jwt.sign({sub: user.email, iss: 'curso-nodejs'}, settings.security.jwtSecret);
+            const token = jwt.sign({sub: user.email, iss: settings.name}, settings.security.jwtSecret);
             response.json({name: user.name, accessToken: token});  
         }
     }
@@ -39,9 +40,14 @@ class UserController extends Router {
     }
 
     applyRoutes(app: restify.Server) {
-        app.post("users/authenticate", this.authenticate);
-        app.get({path: "/users", version: "1.0.0"  }, [authorize('operator', 'admin'), this.getAll]);
-        app.get({path: "/users", version: "2.0.0" }, [authorize('operator', 'admin'), this.getAll_V2]);
+        // unico metodo que nao precisa de token, que é o login do usuário ou seja o authenticate
+        app.post("/users/authenticate", this.authenticate);
+        // nos demais métodos eu obrigo ao usuário a ter pelo menos um dos seguintes papéis
+        
+        // no metodo abaixo getAll para listar os usuarios nao temos controle de versao 
+        // app.get("/users", [authorize('operator', 'admin'), this.getAll]);
+        app.get({path: "/users", version: "1.0.0" }, [authorize('operator', 'admin'), this.getAll]);
+        app.get({path: "/users", version: "2.0.0" }, [authorize('system'), this.getAll_V2]);
     }
 
 }

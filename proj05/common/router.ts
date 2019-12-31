@@ -2,9 +2,12 @@ import * as restify from 'restify'
 import { EventEmitter } from 'events';
 import { NotFoundError } from 'restify-errors';
 
+// EventEmitter emissor de eventos, beforeInsert, beforeUpdate, beforeDelete
+// dizer em cada Controller se os parametros foram preenchidos para persistir o documento
 export abstract class Router extends EventEmitter {
     
-    abstract applyRoutes(application: restify.Server)
+  // preciso garantir que em todas as controllers o desenvolvedor associou a rota o método  
+  abstract applyRoutes(application: restify.Server);
   
     envelope(document: any): any {
       return document

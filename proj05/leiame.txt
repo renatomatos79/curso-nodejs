@@ -1,176 +1,102 @@
-Lista de comandos:
-==================
-mkdir proj03
-cd proj03
-npm init -y
-npm i restify@6.3.4 --save -E (-E versão exata)
-npm i @types/restify@5.0.6 -D -E (-D equivalente a --save)
-copiar do projeto 02 o arquivo tsconfig.json
-tsc -w (deixar o watch rodando em um terminal)
-npm i -g nodemon (monitorar mudanças no arquivo e reexecutar a app - deixar em outro terminal)
+model:
+  schema, representacao das nossas "tabelas" *
+  * quando falarmos de noSQL (nao relacional - Neo4J, OrientDB, MongoDB, Elastic, Kassandra *)
+  layer, ou camada, para tráfego de dados entre a API e o Usuário Final (Requisições e Respostas)
 
-temos aqui 2 tasks rodando! nodemon e tsc
+controller:
+  rotas das apis (endpoints ou "urls")
 
-Rest:
-trabalha com JSON
+service:
+  acesso a model é feita por meio de serviços (managers)
 
-Restful:
-trabalha com JSON e código HTTP e verbos no padrão rest
+usuário -> request -> rota -> controller -> service -> model -> service -> controller -> response 
+(http status code)
 
-Pq Restify?
-Temos JSON por padrão
-Temos erros direcionados para API Rest (Não retornar html por exemplo)
-Suporte nativo para nossas API
+security -> controle de acesso
+- autenticação: quem é voce? gero um token para identificação do usuário
+  as características (properties) como email, nome, id, endereço são definidas em "Claims"
+  já as roles são os papéis ou grupos de acesso, exemplo (operator, admin, user, etc)
+  token: representação de uma sessão do usuário (coleção de claims formatada em base64)
+  jwt: json web token (jwt.io) os campos de um token são separados por "." e cada campo está formatado em base64
+  assinatura: é um campo que contém o resultado de um cálculo para saber se o token foi adulterado ou não (hash)
+  um jwt possui alguns campos padrões como:
+  subject -> sujeito ou usuário, pode ser um ID, login, email (sempre abreviado por sub)
+  issuer  -> uma aplicação responsável pela geração do token (sempre abreviado por iss)
+  type    -> tipo, no caso, jwt
 
-Http Status:
-200 ok
-201 criado - post
-202 assincrono
-204 sem conteudo retornado no corpo da resposta
+  token:
+	a requisição veio com a string abaixo
+        ewoiaWQiOjMyLAoibmFtZSI6InZhbmVzc2EgbWF0b3MiLAoiYWdlIjo0MCwKImdlbmRlciI6Im1hbGUiCn0=
 
-Status de Erro
-30X - Redirecionamento
-300 - ha mais de uma opcao de retorno (ambiguidade)
-301 - endereco foi movido definitivamente e o novo devera ser retornado no corpo da resposta
-302 - movido temporariamente para outro endereço
+	decodificar a string
+	{
+		"id":2,
+		"name":"vanessa matos",
+		"age":40,
+		"gender":"male",
+		"role": "operator_level_1, report"
+	}
+	
+	vou na base de dados e pego um campo que considero como sendo o saltkey do usuário 2 que é  o valor "123456"
+	vou criar um novo objeto contendo o campo hash usando md5 do json da requisicao ja com saltkey
+	{
+		"id":2,
+		"name":"vanessa matos",
+		"age":40,
+		"gender":"male",
+		"saltkey": "123456",
+		"hash": "f5540bc9b489745ac44a6e300c85c248"
+	}
+	
+	devolvo o token para o usuário sem o saltkey 
+	{
+		"id":2,
+		"name":"vanessa matos",
+		"age":40,
+		"gender":"male",
+		"hash": "f5540bc9b489745ac44a6e300c85c248"
+	}
+	
+	agora tenho um novo token a ser gerado 
+	ewoJCSJpZCI6MiwKCQkibmFtZSI6InZhbmVzc2EgbWF0b3MiLAoJCSJhZ2UiOjQwLAoJCSJnZW5kZXIiOiJtYWxlIiwKCQkiaGFzaCI6ICJld29KQ1NKcFpDSTZNaXdLQ1FraWJtRnRaU0k2SW5aaGJtVnpjMkVnYldGMGIzTWlMQW9KQ1NKaFoyVWlPalF3TEFvSkNTSm5aVzVrWlhJaU9pSnRZV3hsSWl3S0NRa2lhR0Z6YUNJNklDSXhNak0wTlRZaUNnbDkiCgl9
+		
+	usuarios:
 
-400 - Erro da requisição (bad request)
-401 - Nao autorizado (precisa de logar)
-403 - Acesso negado (usuario sem permissaoo para uso do recurso)
-404 - conteudo nao encontrado
+	id	name	email						saltkey
+	1	renato	renato.matos79@gmail.com	142536
+	2	vanessa vanessa@ig.com.br			123456 
+	
+	criptografias:
+	sincronas: tem palavra chave para ida e volta 
+	assincronas: so tem ida, ou seja, somente hash (md5)
+	
+	base64 não é criptografia, apenas formatação como json, xml, etc.
 
-500 - erro interno
-501 - nao implementado ainda
-503 - indisponivel
-
-
-Métodos e Nomenclatura
-
-API para Pedidos
-
-GET	/pedidos
-retorna a lista de todos os pedidos da base de dados
-
-GET	/pedidos?dataInicio=01012019&dataTermino=31122019
-retornar a lista de pedidos no periodo
-parametros vem na queryString ou na URL
-
-GET	/pedidos/100
-retorna os dados do pedido 100
-
-GET	/pedidos/100/produtos
-retorna todos os produtos associados ao pedido 100
-
-GET	/pedidos/100/produtos/2/caracteristicas
-retorna as caracteristicas do produto 2 que esta no pedido 100
-informacoes complementares do produto gravadas no pedido
-
-GET	/produtos/2/caracteristicas
-retorna as caracteristicas do produto 2 da tabela de produtos e nao de pedidos
-
-POST	/pedidos
-inclui um novo pedido
-neste caso no body da api temos os campos do pedido
-
-Body da requisição
-{
-  "obs": "preciso com urgencia",
-  "enderecoEntrega": {
-	"UF": "SP",
-	"Cidade": "Sao Paulo",
-	"Bairro": "Centro"
-  },
-  "tipoFrete": "CIF",
-  "produtos: [
-    { "id": 1, "quantidade": 2, "preco": 2.1, "complemento": "cor branca" },
-    { "id": 2, "quantidade": 1, "preco": 4.1, "complemento": "cor preta" }
-  ]
-}
-
-No header da requisição entram os dados de acesso (Token)
-"Authorization": No Auth
-"Authorization": Basic - usuário e senha no cabeçalho (converte para base64)
-"Authorization": OAuth2 - JSON Web Token JWT (OAuth Open Authentication) Usado no mercado
-"Authorization": Bearer - Ao portador - Mandamos o conteudo encriptado (TOken)
-
-Resposta ao Pedido
-
-{
-  "NumeroPedido": 1012,
-  "DataPedido": "01/01/2019",
-  "DataPrevistaEntrega": "05/01/2019",
-  "ValorPedido": 100.24,
-  "StatusPedido": "Cadastrado",
-  "Cliente": {
-    "Id": 100,
-    "Nome": "Renato"
-  },
-  "enderecoEntrega": {
-	"UF": "SP",
-	"Cidade": "Sao Paulo",
-	"Bairro": "Centro"
-  },
-  "produtos: [
-    { "id": 1, "nome": "teclado", "unidade": "und", "quantidade": 2, "preco": 2.1, "complemento": "cor branca" },
-    { "id": 2, "nome": "monitor", "unidade": "und", quantidade": 1, "preco": 4.1, "complemento": "cor preta" }
-  ]
-}
-
-
-/usuarios/login
-{
-  "login": "renato",
-  "senha": "$%QW$QW$%QW#$%W#$%"
-}
-
-Reposta
-{
-  "Token": "1454556#Qq3413412341234",
-  "Expiration": "2019-01-01 10:05:37 PM"
-}
-
-
-PATCH 	/pedidos/1012/endereco-entrega
-Body da requisição
-{
-  "enderecoEntrega": {
-	"UF": "SP",
-	"Cidade": "Sao Paulo",
-	"Bairro": "Centro"
-  }
-}
-
-PATCH 	/pedidos/1012/obs
-Body da requisição
-{
-  "obs": "preciso que seja enviada a NF para o email xpto"
-}
-
-PUT	/pedidos/1012
-alterar o pedido inteiro
-
-Body da requisição
-{
-  "obs": "preciso com urgencia",
-  "enderecoEntrega": {
-	"UF": "SP",
-	"Cidade": "Sao Paulo",
-	"Bairro": "Bairro de Fatima"
-  },
-  "tipoFrete": "FOB",
-  "produtos: [
-    { "id": 1, "quantidade": 2, "preco": 2.1, "complemento": "cor branca" }
-  ]
-}
-
-
-DELETE	/pedidos/1012
-apaga o pedido 1012
-
-DELETE	/pedidos/1012/produtos/1
-apaga o item 1 do pedido 1012
-
-
+- autorização:
+  para saber se o "user" pode ou não pode executar algo dentro do sistema 
+  
+  erros para um metodo protegido:
+  1) não autenticado (401 Unauthorized)
+  2) autenticado mas sem acesso (403 Forbidden)
+  
+  com o hash conseguimos evitar problemas do tipo 
+  Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet
+  
+  aonde enviamos o token?
+  no header da requisição, ou cabeçalho.
+  header temos um campo chamado authorization que em seguida possui um tipo "Bearer, oAuth, Basic"
+  "authorization" : "Bearer ewoJCSJpZCI6MiwKCQkibmFtZSI6InZhbmVzc2EgbWF0b3MiLAoJCSJhZ2UiOjQwLAoJCSJnZW5kZXIiOiJtYWxlIiwKCQkiaGFzaCI6ICJld29KQ1NKcFpDSTZNaXdLQ1FraWJtRnRaU0k2SW5aaGJtVnpjMkVnYldGMGIzTWlMQW9KQ1NKaFoyVWlPalF3TEFvSkNTSm5aVzVrWlhJaU9pSnRZV3hsSWl3S0NRa2lhR0Z6YUNJNklDSXhNak0wTlRZaUNnbDkiCgl9"
+  
+  como ler o token?
+  verificar se há no header um campo authorization
+  tendo o campo authorization pegar o valor dele "Bearer ewoJCSJpZCI6MiwKCQkibmFtZSI6InZhbmVzc2EgbWF0b3MiLAoJCSJhZ2UiOjQwLAoJCSJnZW5kZXIiOiJtYWxlIiwKCQkiaGFzaCI6ICJld29KQ1NKcFpDSTZNaXdLQ1FraWJtRnRaU0k2SW5aaGJtVnpjMkVnYldGMGIzTWlMQW9KQ1NKaFoyVWlPalF3TEFvSkNTSm5aVzVrWlhJaU9pSnRZV3hsSWl3S0NRa2lhR0Z6YUNJNklDSXhNak0wTlRZaUNnbDkiCgl9"
+  com o valor usar a funcao split(' ') que transformar uma string em um array de acordo com o caractere usado, neste caso, espaço em branco 
+  value[0] = Bearer 
+  value[1] = ewoJCSJpZCI6MiwKCQkibmFtZSI6InZhbmVzc2EgbWF0b3MiLAoJCSJhZ2UiOjQwLAoJCSJnZW5kZXIiOiJtYWxlIiwKCQkiaGFzaCI6ICJld29KQ1NKcFpDSTZNaXdLQ1FraWJtRnRaU0k2SW5aaGJtVnpjMkVnYldGMGIzTWlMQW9KQ1NKaFoyVWlPalF3TEFvSkNTSm5aVzVrWlhJaU9pSnRZV3hsSWl3S0NRa2lhR0Z6YUNJNklDSXhNak0wTlRZaUNnbDkiCgl9
+  
+  
+  
+  
 
 
 
