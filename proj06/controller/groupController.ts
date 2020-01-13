@@ -11,10 +11,13 @@ class GroupController extends Router {
     }
 
     report = (request, response, next) => {
-        let filter = this.groupService.groups();
-        response.statusCode = 200;
-        response.json(filter);
-        return next();
+        console.log("loading groups v2");
+        this.groupService.groups_v2().then(groups => {
+            response.statusCode = 200;
+            response.json(groups);
+            return next();
+        });
+        
         /*
         const products = this.productService.products();
         let filter = this.groupService.groups();

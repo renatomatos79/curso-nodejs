@@ -31,7 +31,8 @@ class ProductController extends Router {
     // applyRoutes é quem associa a combinação [URL + Verbo (get, post, put, patch, delete)] ao método
     // aqui tambem digo se ha restricao de acesso ao metodo atraves de uma ROLE
     applyRoutes(app: restify.Server) {
-        app.get("/products", [authorize('admin'), this.products]);
+        //app.get("/products", [authorize('admin'), this.products]);
+        app.get("/products", this.products);
         
         // examplos de como usar autenticacao e autorizacao
         //app.get("/products/:id", [authorize('operator'), this.products]);

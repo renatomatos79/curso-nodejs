@@ -11,4 +11,4 @@ const groupSchema = new mongoose.Schema({
     }
 });
 
-export const GroupModel = mongoose.model("group", groupSchema);
+export const GroupModel = mongoose.model("groups", groupSchema);

@@ -1,5 +1,12 @@
 instalar o driver para acesso ao mongodb
 	npm install mongoose@5.8.7
 	npm install @types/mongoose -D -E
-	
+
+carregar script
+use curso-nodejs
+db.groups.insertMany([
+  { id:1, name: "grupo 1" },
+  { id:2, name: "grupo 2" },  
+  { id:3, name: "grupo 3" }
+]);
 	

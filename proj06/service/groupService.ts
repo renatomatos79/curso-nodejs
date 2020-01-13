@@ -16,6 +16,15 @@ class GroupService {
         });
         return result;
     }
+
+    groups_v2(): Promise<mongoose.Document[]>{
+        return new Promise((resolver, reject) => {
+            const result:Array<Group> = new Array<Group>();
+            GroupModel.find().then(groups=>{
+                resolver(groups);
+            });
+        });        
+    }
 }
 
 export { GroupService }
