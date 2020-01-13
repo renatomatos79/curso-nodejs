@@ -4,6 +4,9 @@ cd C:\Program Files\MongoDB\Server\4.2\bin
 // iniciar a aplicacao cliente
 mongo.exe
 
+// selecione o database
+use aula
+
 1. criar os seguintes pedidos
 db.orders.insertMany([
 	{ _id: 1, cust_id: "abc1", ord_date: ISODate("2012-11-02T17:04:11.102Z"), status: "A", amount: 50, price: 5.25 },
@@ -17,6 +20,9 @@ db.orders.insertMany([
 
 db.orders.aggregate(
    [
+     { 
+		$match : { status : "A" } 
+	 },
      {
        $group:
          {
