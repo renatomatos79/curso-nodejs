@@ -1,0 +1,5 @@
+instalar o driver para acesso ao mongodb
+	npm install mongoose@5.8.7
+	npm install @types/mongoose -D -E
+	
+	

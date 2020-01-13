@@ -1,0 +1,160 @@
+{
+	"id": "67729e3e-7752-f929-a1db-48c107fc8544",
+	"name": "curso nodejs",
+	"description": "",
+	"order": [
+		"637a67a9-0730-caae-5429-0f2df28cef09",
+		"ffd576bb-d866-21cf-81c3-67cfbf0a7f4e",
+		"e7e2ae11-4879-4efa-6e4b-9708fe0d5476",
+		"20e7cd2c-3006-794c-ab61-ef25409df337"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1577655188094,
+	"owner": "1044950",
+	"public": false,
+	"requests": [
+		{
+			"id": "20e7cd2c-3006-794c-ab61-ef25409df337",
+			"headers": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZW5ldWVjZUBpZy5jb20iLCJpc3MiOiJjdXJzby1ub2RlanMiLCJpYXQiOjE1Nzc2NTQwMjJ9.UKN8ptpWsCZzLVNSAxxMwErY1jxMI-4RhKCwCmi3Z2U\n",
+			"headerData": [
+				{
+					"key": "",
+					"value": "",
+					"description": "",
+					"enabled": false
+				},
+				{
+					"key": "Authorization",
+					"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZW5ldWVjZUBpZy5jb20iLCJpc3MiOiJjdXJzby1ub2RlanMiLCJpYXQiOjE1Nzc2NTQwMjJ9.UKN8ptpWsCZzLVNSAxxMwErY1jxMI-4RhKCwCmi3Z2U",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:3000/products",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "67729e3e-7752-f929-a1db-48c107fc8544",
+			"data": null,
+			"dataMode": "params",
+			"name": "http://localhost:3000/products",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1577655229970,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "637a67a9-0730-caae-5429-0f2df28cef09",
+			"headers": "accept-version: 1.0.0\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZW5ldWVjZUBpZy5jb20iLCJpc3MiOiJjdXJzby1ub2RlanMiLCJpYXQiOjE1Nzc2NTQwMjJ9.UKN8ptpWsCZzLVNSAxxMwErY1jxMI-4RhKCwCmi3Z2U\n",
+			"headerData": [
+				{
+					"key": "accept-version",
+					"value": "1.0.0",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZW5ldWVjZUBpZy5jb20iLCJpc3MiOiJjdXJzby1ub2RlanMiLCJpYXQiOjE1Nzc2NTQwMjJ9.UKN8ptpWsCZzLVNSAxxMwErY1jxMI-4RhKCwCmi3Z2U",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:3000/users?version=1.0.0",
+			"queryParams": [
+				{
+					"key": "version",
+					"value": "1.0.0",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "67729e3e-7752-f929-a1db-48c107fc8544",
+			"data": null,
+			"dataMode": "params",
+			"name": "http://localhost:3000/users?version=1.0.0",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1577655190471,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "e7e2ae11-4879-4efa-6e4b-9708fe0d5476",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:3000/users/authenticate",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "67729e3e-7752-f929-a1db-48c107fc8544",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:3000/users/authenticate",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1577655211658,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"email\":\"renato.matos79@gmail.com\",\n\t\"password\": \"rcm@1234\"\n}"
+		},
+		{
+			"id": "ffd576bb-d866-21cf-81c3-67cfbf0a7f4e",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:3000/users/authenticate",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "67729e3e-7752-f929-a1db-48c107fc8544",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:3000/users/authenticate",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1577655203681,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"email\":\"reneuece@ig.com\",\n\t\"password\": \"rf@1234\"\n}"
+		}
+	]
+}

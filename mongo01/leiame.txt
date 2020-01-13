@@ -1,0 +1,67 @@
+Acessando o mongoDB
+	// ir para o diretorio de instalacao do mongodb usando o DOS
+	cd C:\Program Files\MongoDB\Server\4.2\bin	
+	
+	// iniciar a aplicacao cliente
+	mongo.exe
+	
+	// comandos basicos
+	db -> mostra o banco ativo
+	show dbs -> mostra os bancos disponiveis
+	use aula -> cria um banco aula
+	db.dropDatabase() -> apaga o banco de dados
+	
+Listando as collections:
+	show collections
+
+Removendo uma collection
+	db.products.drop()
+
+Renomeando uma collection
+ db.inventory.renameCollection("estoque");	
+
+=============== Manipulando dados ===============================================================	
+
+db.inventory.insertMany( [
+   { item: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, status: "A" },
+   { item: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, status: "P" },
+   { item: "paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, status: "D" },
+   { item: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, status: "D" },
+   { item: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, status: "A" },
+] );	
+
+=============== Removendo registros ===============================================================	
+
+// apaga todos os registros da collection inventory
+db.inventory.deleteMany({});
+
+// remove produtos com status igual a "A"
+db.inventory.deleteMany({ status : "A" })
+
+// remove apenas um produto quando status for "D"
+db.inventory.deleteOne( { status: "D" } )
+
+// remove quando o nome do item for notebook
+db.inventory.deleteOne( { item: "notebook" } )
+
+// removendo pelo ID
+db.inventory.deleteOne( { "_id" : ObjectId("5e0fa95befbbca87acedac3a") } );
+
+=============== Backup collections ===============================================================	
+
+cd C:\Program Files\MongoDB\Server\4.2\bin
+mongoexport --collection=inventory --db=aula --out=c:/temp/inventory.json
+mongoimport --db=aula --collection=inventory2 --file=c:/temp/inventory.json
+
+
+
+=============== Links Úteis ===============================================================	
+
+Instalação:
+	https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
+
+Operações para CRUD:
+	https://docs.mongodb.com/manual/tutorial/insert-documents/
+	https://docs.mongodb.com/manual/tutorial/update-documents/
+	https://docs.mongodb.com/manual/tutorial/remove-documents/
+	https://docs.mongodb.com/manual/tutorial/query-documents/
