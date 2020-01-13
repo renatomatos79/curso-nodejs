@@ -1,4 +1,4 @@
-import { AppServer } from './common/server'
+import { AppServer } from './common/server';
 import { GroupController } from './controller/groupController';
 import { GroupService } from './service/groupService';
 import { ProductService } from './service/productService';

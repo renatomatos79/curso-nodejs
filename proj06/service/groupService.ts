@@ -6,20 +6,15 @@ class GroupService {
     constructor(){}
 
     groups(): Array<Group>{
-        const result:Array<Group> = new Array<Group>();
-        GroupModel.find({},(error: any, data: mongoose.Document[])=>{            
-            if (!error) {
-                data.forEach(doc=>{
-                    result.push(new Group(doc.id, "123"));
-                });
-            }
-        });
-        return result;
+        const groups:Array<Group> = new Array<Group>();
+        groups.push(new Group(1, "Informática"));
+        groups.push(new Group(2, "Papelaria"));
+        groups.push(new Group(3, "Brinquedos"));
+        return groups;
     }
 
     groups_v2(): Promise<mongoose.Document[]>{
         return new Promise((resolver, reject) => {
-            const result:Array<Group> = new Array<Group>();
             GroupModel.find().then(groups=>{
                 resolver(groups);
             });

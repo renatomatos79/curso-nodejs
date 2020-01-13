@@ -11,9 +11,7 @@ class AppServer {
     constructor(){}
 
     initDB() {
-        console.log("connecting... => ", settings);
-        const conn = mongoose.connect(settings.db.url, { useNewUrlParser: true, useUnifiedTopology: true });
-        return conn;
+        return mongoose.connect(settings.db.url, { useNewUrlParser: true, useUnifiedTopology: true });
     }
 
     initRoutes(routers: Router[] = []): Promise<restify.Server> {
@@ -42,9 +40,9 @@ class AppServer {
     }
 
     bootstrap(routers: Router[] = []): Promise<restify.Server> {
-        const result = this.initDB().then(() => this.initRoutes(routers).then((server) => server));
-        console.log("bootstrap => ", result);
-        return result;
+        // chama o metodo initDB que é uma Promise
+        // se o metodo funcionar, chama o metodo initRoutes
+        return this.initDB().then(()=>this.initRoutes(routers).then((serverInstance) => serverInstance));
     }
 
 }
