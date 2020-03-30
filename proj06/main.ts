@@ -6,15 +6,15 @@ import { UserService } from './service/userService';
 import { ProductController } from './controller/productController';
 import { UserController } from './controller/userController';
 
-// services instances ...
+// inicializa os serviços
 const groupService = new GroupService();
 const userService = new UserService();
 const productService = new ProductService(groupService);
-// controllers instances ...
+// inicializa as controllers
 const groupController = new GroupController(productService, groupService);
 const productController = new ProductController(productService);
 const userController = new UserController(userService);
-
+// inicializa o servidor web
 const server = new AppServer();
 // bootstrap significa setup nos registramos as nossas controllers
 server.bootstrap([

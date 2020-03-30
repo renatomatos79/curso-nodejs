@@ -46,7 +46,7 @@ class UserController extends Router {
         
         // no metodo abaixo getAll para listar os usuarios nao temos controle de versao 
         // app.get("/users", [authorize('operator', 'admin'), this.getAll]);
-        app.get({path: "/users", version: "1.0.0" }, [authorize('operator', 'admin'), this.getAll]);
+        // app.get({path: "/users", version: "1.0.0" }, [authorize('operator', 'admin'), this.getAll]);
         app.get({path: "/users", version: "2.0.0" }, [authorize('system'), this.getAll_V2]);
     }
 
