@@ -7,7 +7,5 @@
    },
    db: {
      url: process.env.CURSO_NODEJS_DB_URL || 'mongodb://localhost:27017/curso-nodejs',
-     user: process.env.CURSO_NODEJS_DB_USER || "",
-     password: process.env.CURSO_NODEJS_DB_PASSWORD || ""
    }
  }

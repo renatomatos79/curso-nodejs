@@ -1,20 +1,46 @@
 import { Product } from "../model/product";
-import { GroupService } from "./groupService";
 import { ProductModel } from "../schemas/product.model";
+import { Util } from "../common/util";
+import { ErrorCode } from "../model/errorcode.model";
+import { HttpStatusCode } from "../enums/HttpStatusCode.enum";
 
 class ProductService {
 
-    constructor(protected groupService: GroupService){}
+    constructor(){}
 
     create(data: Product): Promise<Product> {
-        return new Promise((resolve, reject) => {
-            let model = new ProductModel({
+        return new Promise(async (resolve, reject) => {
+            
+            if (data == null) {
+                const error = new ErrorCode(HttpStatusCode.BadRequest, "data can not be null");
+                reject(error);
+            }
+            if (data.id <= 0) {
+                const error = new ErrorCode(HttpStatusCode.BadRequest, "invalid id");
+                reject(error);
+            }
+            if (Util.isEmpty(data.name)) {
+                const error = new ErrorCode(HttpStatusCode.BadRequest, "name can not be null");
+                reject(error);
+            }
+            // await -> espera a Promise terminar e por isso precisa estar dentro de uma Thread com async
+            const temp = await ProductModel.find({"id": data.id}).exec();
+            if (temp.length > 0) {
+                const error = new ErrorCode(HttpStatusCode.Conflict, "Product already exists");
+                reject(error);
+            }
+            
+            const row = new ProductModel({
                 id: data.id,
                 name: data.name
             });
-            model.save()
-                .then(doc => { resolve(data); })
-                .catch(error => reject(error));
+            row.save()
+                .then(doc => { 
+                    resolve(data); 
+                })
+                .catch(error => 
+                    reject(new ErrorCode(HttpStatusCode.InternalError, error.toString()))
+                );
         });
     }
 
@@ -29,6 +55,12 @@ class ProductService {
                         reject(new Error("Product not found"));
                     }
                 });
+        });
+    }
+
+    delete(id: number): Promise<Product> {
+        return new Promise(async (resolve, reject) => {
+            resolve(null);
         });
     }
 
@@ -51,8 +83,6 @@ class ProductService {
     }
 
     products(): Array<Product> {
-        const groups = this.groupService.groups();
-        
         const products:Array<Product> = new Array<Product>();
         // products.push(new Product(1, "Keyboard", "und", 25.32, 100, groups.filter(f=>f.id === 1)[0]));
         // products.push(new Product(2, "Mouse Microsoft sem Fio", "und", 34.99, 500, groups.filter(f=>f.id === 1)[0]));

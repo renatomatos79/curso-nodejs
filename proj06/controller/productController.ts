@@ -3,6 +3,8 @@ import { ProductService } from "../service/productService";
 import { Router } from "../common/router";
 import { ProductModel } from '../schemas/product.model';
 import { Product } from '../model/product';
+import { ErrorCode } from '../model/errorcode.model';
+import { HttpStatusCode } from '../enums/HttpStatusCode.enum';
 // import { authorize } from '../security/authorize.handler';
 
 class ProductController extends Router {
@@ -12,19 +14,19 @@ class ProductController extends Router {
     }
     
     create = (request, response, next) => {        
-        var data = new Product();
-        data.id = request.body.id;
-        data.name = request.body.name;
+        var data = request.body as unknown as Product;
+        
         this.productService
             .create(data)
             .then(product => {
-                response.status(201);
+                response.status(HttpStatusCode.Created);
                 response.json(product);
                 next();
             })
             .catch(error => {
-                response.status(500);
-                response.send(error);
+                const errorCode = error as ErrorCode;
+                response.status(errorCode.code); // campo status da api cliente
+                response.json(errorCode); // corpo da mensagem de retorno
             });
     }
 

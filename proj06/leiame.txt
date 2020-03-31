@@ -1,12 +1,65 @@
-instalar o driver para acesso ao mongodb
-	npm install mongoose@5.8.7
-	npm install @types/mongoose -D -E
+1) npm i
+2) tsc -w
+3) nodemon dist/main.js
 
-carregar script
-use curso-nodejs
-db.groups.insertMany([
-  { id:1, name: "grupo 1" },
-  { id:2, name: "grupo 2" },  
-  { id:3, name: "grupo 3" }
-]);
-	
+dicas!
+- model\settings.ts temos as configurações do projeto como connection string e porta da api
+- instalar o npm i -g typescript 3.8.3
+- usar a versão do nodejs 12.16.1
+- usar o nodemon 2.0.2
+
+atividades!
+- crud de produtos *
+- crud de grupos *
+- crud de unidades de medida *
+- crud de usuarios *
+- login para gerar o token
+- validar o token lendo a base de dados
+- IoC
+
+rotas
+- [post] users/login
+
+- [post] products
+- [put] products/:id
+- [delete] products/:id
+- [get] products/:id
+- [get] products
+
+- [post] unities
+- [put] unities/:id
+- [delete] unities/:id
+- [get] unities/:id
+- [get] unities
+
+- [post] groups
+- [put] groups/:id
+- [delete] groups/:id
+- [get] groups/:id
+- [get] groups
+
+
+passo a passo
+- schemas (para cadas Collection)
+- model definir as propriedades que iremos trabalhar
+- services
+- controller que fara uso do service
+  a) vamos em applyRoutes e expomos os metodos do nosso servico atraves de uma controller
+- main.ts e inicializamos o nosso servico
+
+diferenca entre model e schema
+- schema contem uma estrutura da tabela
+- model contem a estrutura da nossa api
+
+exemplo:
+schemas: unidade, grupo, produto
+model: produto { group, unidade, ... }
+
+
+schemas: cliente, pedido, produto, item, unidade
+model: pedido { cliente, items:[ item: { produto { unidade } } ] }
+
+- habilitar cors (uma vez apenas)
+  para que sua API fique acessivel a outras aplicações (origin)
+  para que voce habilite alguns tipos de headers (cabecalhos, como tipos de autenticação)
+  

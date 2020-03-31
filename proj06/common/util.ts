@@ -9,6 +9,10 @@ class Util {
         }        
         return temp;
     }
+
+    static isEmpty(str: string): boolean {
+        return str === null || str === undefined || str.trim() === '';
+    }
 }
 
 export { Util }

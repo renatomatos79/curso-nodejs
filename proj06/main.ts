@@ -9,7 +9,7 @@ import { UserController } from './controller/userController';
 // inicializa os serviços
 const groupService = new GroupService();
 const userService = new UserService();
-const productService = new ProductService(groupService);
+const productService = new ProductService();
 // inicializa as controllers
 const groupController = new GroupController(productService, groupService);
 const productController = new ProductController(productService);
