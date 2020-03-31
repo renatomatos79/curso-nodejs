@@ -14,8 +14,7 @@ class ProductController extends Router {
     }
     
     create = (request, response, next) => {        
-        var data = request.body as unknown as Product;
-        
+        var data = request.body as unknown as Product;        
         this.productService
             .create(data)
             .then(product => {
@@ -51,13 +50,14 @@ class ProductController extends Router {
         this.productService
             .find(request.params.id)
             .then(product => {
-                response.status(product != null ? 200 : 404);
+                response.status(product != null ? HttpStatusCode.OK : HttpStatusCode.NotFound);
                 response.json(product);
                 next();
             })
             .catch(error => {
-                response.status(500);
-                response.send(error);
+                const errorCode = error as ErrorCode;
+                response.status(errorCode.code); // campo status da api cliente
+                response.json(errorCode); // corpo da mensagem de retorno
             });
     }
 
